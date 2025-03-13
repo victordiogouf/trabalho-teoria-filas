@@ -35,6 +35,9 @@ class QueueSimulator:
       if self.next_arrival < self.next_departures[0]:
         # Arrival event
         self.time = self.next_arrival
+        if (len(self.queue) + self.servers_busy == self.max_users):
+          self.next_arrival = self.time + gen_exponential_time(self.lambda_rate)
+          continue
         self.total_users += 1
         if self.servers_busy < self.num_servers:
           self.servers_busy += 1
@@ -42,9 +45,6 @@ class QueueSimulator:
           self.total_service_time += service_time
           self.insert_departure(self.time + service_time)
         else:
-          if (len(self.queue) + self.servers_busy == self.max_users):
-            self.total_users -= 1
-          else:
             self.queue.append(self.time)
         self.next_arrival = self.time + gen_exponential_time(self.lambda_rate)
       else:
