@@ -28,7 +28,7 @@ class QueueSimulator:
     self.simulation_time = simulation_time
     self.file = open("output.txt", "w")
 
-    self.total_arrivals = 0
+    self.total_entries = 0
     self.total_service_users = 0.0
     self.total_queue_users = 0.0
     self.total_queue_time = 0.0
@@ -53,7 +53,7 @@ class QueueSimulator:
 
         self.file.write(f"Usuario chega em {self.time:.5f}\n")
         self.population_size -= 1
-        self.total_arrivals += 1
+        self.total_entries += 1
         if self.servers_busy < self.num_servers:
           self.file.write(f"Usuario entra em servico em {self.time:.5f}\n")
           self.servers_busy += 1
@@ -91,10 +91,10 @@ class QueueSimulator:
         break
 
   def avg_queue_time(self):
-    return self.total_queue_time / self.total_arrivals
+    return self.total_queue_time / self.total_entries
   
   def avg_service_time(self):
-    return self.total_service_time / self.total_arrivals
+    return self.total_service_time / self.total_entries
   
   def avg_system_time(self):
     return self.avg_queue_time() + self.avg_service_time()
