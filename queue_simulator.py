@@ -9,7 +9,7 @@ def gen_normal_time(mean: float, std_dev: float):
     u1 = random()
     u2 = random()
     z = sqrt(-2.0 * log(u1)) * cos(2.0 * pi * u2)
-    if mean + std_dev * z > 0
+    if mean + std_dev * z > 0:
       return mean + std_dev * z
 
 class QueueSimulator:
