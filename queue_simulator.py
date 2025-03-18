@@ -21,7 +21,8 @@ class QueueSimulator:
     self.gen_service_args = gen_service_args
     self.num_servers = num_servers
     self.max_users = max_users
-    self.population_size = population_size
+    self.population_size = population_size # População disponível
+    self.N = population_size # População total
     self.time = 0
     self.queue: list[float] = []
     self.next_arrival = gen_exponential_time(lambda_rate)
@@ -75,7 +76,11 @@ class QueueSimulator:
           self.insert_departure(self.time + service_time)
         else:
           self.queue.append(self.time)
-        self.next_arrival = self.time + gen_exponential_time(self.lambda_rate)
+          
+          if self.N != 2**31-1:
+            self.next_arrival = self.time + gen_exponential_time((self.N-len(self.queue))*self.lambda_rate)
+          else:
+            self.next_arrival = self.time + gen_exponential_time(self.lambda_rate)
       else:
         # Departure event
         next_departure = self.next_departures.pop(0)
