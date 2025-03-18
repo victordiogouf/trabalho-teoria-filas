@@ -36,6 +36,11 @@ class QueueSimulator:
     self.total_queue_time = 0.0
     self.total_service_time = 0.0
 
+    self.arrival_times = []
+    self.service_times = []
+    self.last_arrival = None
+    self.last_service_time = None
+    
     self.simulate()
     self.file.close()
 
@@ -48,6 +53,12 @@ class QueueSimulator:
 
         self.time = self.next_arrival
 
+        if self.last_arrival is not None:
+          self.arrival_times.append(self.time - self.last_arrival)
+        else:
+          self.arrival_times.append(self.time)
+        self.last_arrival = self.time
+        
         if len(self.queue) + self.servers_busy == self.max_users or self.population_size == 0:
           self.file.write(f"Usuario rejeitado em {self.time:.5f}\n")
           self.next_arrival = self.time + gen_exponential_time(self.lambda_rate)
@@ -60,6 +71,7 @@ class QueueSimulator:
           self.file.write(f"Usuario entra em servico em {self.time:.5f}\n")
           self.servers_busy += 1
           service_time = self.gen_service_time(*self.gen_service_args)
+          self.service_times.append(service_time)
           self.total_service_time += service_time
           self.insert_departure(self.time + service_time)
         else:
@@ -79,6 +91,7 @@ class QueueSimulator:
           arrival_time = self.queue.pop(0)
           self.total_queue_time += self.time - arrival_time
           service_time = self.gen_service_time(*self.gen_service_args)
+          self.service_times.append(service_time)
           self.total_service_time += service_time
           self.insert_departure(self.time + service_time)
         else:
