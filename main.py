@@ -23,13 +23,22 @@ def get_service_distribution():
   else:
     mu_rate = get_float("Entre com a taxa de serviço: ")
     return (gen_exponential_time, (mu_rate,))
+
+def get_len_pop():
+    len_pop = input("Entre com a característica da população ([F]inita / [i]nfinita)").lower()
+    if len_pop == "i":
+        population_size = 2**31 - 1
+    else:
+        population_size = get_int("Entre com o tamanho da população: ")
+    return population_size
+        
   
 def main():
   lambda_rate = get_float("Entre com a taxa de chegada: ")
   service_distribution = get_service_distribution()
   num_servers = get_int("Entre com o número de servidores: ")
   max_users = get_int("Entre com o número máximo de usuários no sistema: ")
-  population_size = get_int("Entre com o tamanho da população: ")
+  population_size = get_len_pop()
   simulation_time = get_float("Entre com o tempo total de simulação: ")
 
   QueueSimulator(lambda_rate, *service_distribution, num_servers, max_users, population_size, simulation_time)
