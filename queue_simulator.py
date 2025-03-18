@@ -36,10 +36,9 @@ class QueueSimulator:
     self.total_queue_time = 0.0
     self.total_service_time = 0.0
 
-    self.arrival_times = []
+    self.arrival_differences = []
     self.service_times = []
     self.last_arrival = None
-    self.last_service_time = None
     
     self.simulate()
     self.file.close()
@@ -54,9 +53,9 @@ class QueueSimulator:
         self.time = self.next_arrival
 
         if self.last_arrival is not None:
-          self.arrival_times.append(self.time - self.last_arrival)
+          self.arrival_differences.append(self.time - self.last_arrival)
         else:
-          self.arrival_times.append(self.time)
+          self.arrival_differences.append(self.time)
         self.last_arrival = self.time
         
         if len(self.queue) + self.servers_busy == self.max_users or self.population_size == 0:
@@ -122,12 +121,28 @@ class QueueSimulator:
   
   def avg_system_users(self):
     return self.avg_queue_users() + self.avg_service_users()
+
+  def avg_arrival_differences(self):
+    return sum(self.arrival_differences)/len(self.arrival_differences)
+  
+  def var_arrival_differences(self):
+    return sum((x - self.avg_arrival_differences) ** 2 for x in self.arrival_differences)
+
+  def var_service_times(self):
+    return sum((x - self.avg_service_time) ** 2 for x in self.service_times)
+
+  def avg_service_times(self):
+    return sum(self.service_times)/len(self.service_times)
   
   def print_results(self):
     print("\nResultados da simulação")
     print("> Tempo médio na fila:", self.avg_queue_time())
     print("> Tempo médio em serviço:", self.avg_service_time())
+    print("> Tempo médio em serviço TESTE:", self.avg_service_times())
+    print("> Variância dos tempos em serviço:", self.var_service_times())
     print("> Tempo médio no sistema:", self.avg_system_time())
+    print("> Tempo médio do tempo entre chegadas:", self.avg_arrival_differences())
+    print("> Variância do tempo entre chegadas:", self.var_arrival_differences())
     print("> Número médio de usuários na fila:", self.avg_queue_users())
     print("> Número médio de usuários em serviço:", self.avg_service_users())
     print("> Número médio de usuários no sistema:", self.avg_system_users())
