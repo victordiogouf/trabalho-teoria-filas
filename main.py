@@ -25,7 +25,7 @@ def get_service_distribution():
     return (gen_exponential_time, (mu_rate,))
 
 def get_len_pop():
-    len_pop = input("Entre com a característica da população ([F]inita / [i]nfinita)").lower()
+    len_pop = input("Entre com a característica da população ([F]inita / [i]nfinita): ").lower()
     if len_pop == "i":
         population_size = 2**31 - 1
     else:
