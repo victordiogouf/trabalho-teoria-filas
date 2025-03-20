@@ -131,10 +131,10 @@ class QueueSimulator:
     return sum(self.arrival_differences)/len(self.arrival_differences)
   
   def var_arrival_differences(self):
-    return sum((x - self.avg_arrival_differences()) ** 2 for x in self.arrival_differences)
+    return sum((x - self.avg_arrival_differences()) ** 2 for x in self.arrival_differences)/(len(self.arrival_differences)-1)
 
   def var_service_times(self):
-    return sum((x - self.avg_service_time()) ** 2 for x in self.service_times)
+    return sum((x - self.avg_service_time()) ** 2 for x in self.service_times)/(len(self.service_times)-1)
 
   def avg_service_times(self):
     return sum(self.service_times)/len(self.service_times)
